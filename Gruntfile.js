@@ -114,10 +114,10 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', [
-    'mochaTest', 'eslint', 'concat', 'uglify', 'nodemon'
+    'mochaTest', 'eslint', 'concat', 'uglify', 'cssmin', 'nodemon'
   ]);
 
   grunt.registerTask('prod', [
-    'mochaTest', 'eslint', 'concat', 'uglify', 'shell'
+    'mochaTest', 'eslint', 'concat', 'uglify', 'cssmin', 'shell'
   ]);
 };
