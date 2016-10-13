@@ -1,8 +1,12 @@
 module.exports = function(grunt) {
-
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    
     concat: {
+      dist: {
+        files: { 'public/dist/<%= pkg.name %>.js': 'public/client/*.js',
+        }
+      }      
     },
 
     mochaTest: {
@@ -21,15 +25,31 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      dist: {
+        files: { 'public/dist/<%= pkg.name%>.min.js': 'public/dist/shortly-deploy.js',
+          'public/dist/backbone.min.js': 'public/lib/backbone.js',
+          'public/dist/underscore.min.js': 'public/lib/underscore.js',
+          'public/dist/handlebars.min.js': 'public/lib/handlebars.js',
+          'public/dist/jquery.min.js': 'public/lib/jquery.js'
+        }
+      }
     },
 
     eslint: {
       target: [
-        // Add list of files to lint here
+        'public/lib/**/*.js', 
+        'public/client/**/*.js', 
+        '*.js', 
+        'app/**/*.js'
       ]
     },
 
     cssmin: {
+      dist: {
+        files: {
+          'public/dist/style.min.css': 'public/*.css'
+        }
+      }
     },
 
     watch: {
@@ -50,8 +70,11 @@ module.exports = function(grunt) {
     },
 
     shell: {
-      prodServer: {
+      target: {
+        command: 'git push live master'
       }
+
+
     },
   });
 
@@ -72,24 +95,29 @@ module.exports = function(grunt) {
   // Main grunt tasks
   ////////////////////////////////////////////////////
 
+  grunt.registerTask('default', ['eslint']);
+
   grunt.registerTask('test', [
-    'mochaTest'
+    'mochaTest', 'eslint'
   ]);
 
   grunt.registerTask('build', [
+    'concat', 'uglify'
   ]);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
-      // add your production server task here
+      grunt.task.run(['shell']);
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
   });
 
   grunt.registerTask('deploy', [
-    // add your deploy tasks here
+    'mochaTest', 'eslint', 'concat', 'uglify', 'nodemon'
   ]);
 
-
+  grunt.registerTask('prod', [
+    'mochaTest', 'eslint', 'concat', 'uglify', 'shell'
+  ]);
 };
