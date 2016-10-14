@@ -23,8 +23,8 @@ userSchema.pre('save', function(callback) {
     });
 });
 
-User.comparePassword = function(attemptedPassword, callback) {
-  bcrypt.compare(attemptedPassword, this.password, function(err, match) {
+User.comparePassword = function(attemptedPassword, password, callback) {
+  bcrypt.compare(attemptedPassword, password, function(err, match) {
     if (err) {
       callback(err);
     } else {

@@ -2,7 +2,7 @@
 var db = require('../config');
 var User = require('../models/user');
 
-var Users = new db.Collection();
+var Users = db.Collection();
 
 Users.model = User;
 
