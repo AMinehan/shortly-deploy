@@ -15,10 +15,11 @@ xdescribe('', function() {
 
   beforeEach(function(done) {
     // Log out currently signed in user
+    console.log('hi ', Link);
     request(app)
       .get('/logout')
       .end(function(err, res) {
-
+        
         // Delete objects from db so they can be created later for the test
         Link.remove({url: 'http://www.roflzoo.com/'}).exec();
         User.remove({username: 'Savannah'}).exec();
